@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>세이프 라인 (Safe-line)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght=400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 기본 초기화 및 화면 밀림 절대 방지 */
+        * { box-sizing: border-box; font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; }
+        html, body { width: 100%; overflow-x: hidden; background-color: #E2EEDF; color: #1E293B; line-height: 1.6; min-height: 100vh; }
+
+        /* 대형 원형 그라데이션 배경 */
+        .bg-circle-pattern {
+            position: absolute;
+            top: -350px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140vw;
+            height: 750px;
+            background: radial-gradient(circle, #74BA82 0%, #318F50 70%, #22743C 100%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* 헤더 기본 스타일 (PC 기준) */
+        header {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 20px 40px;
+            text-align: center;
+            color: white;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header h1 { font-size: 56px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+        header p { font-size: 18px; color: #E2F5E5; font-weight: 400; opacity: 0.9; }
+
+        /* 💻 데스크톱(PC) 로그인 버튼 위치 설정 */
+        .top-nav { 
+            position: absolute; 
+            bottom: 45px; 
+            right: 20px; 
+            z-index: 3; 
+        }
+        .btn-top-login {
+            background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 8px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+            backdrop-filter: blur(4px); transition: all 0.2s;
+        }
+        .btn-top-login:hover { background: rgba(255,255,255,0.35); }
+
+        .container { 
+            position: relative;
+            z-index: 2;
+            max-width: 900px; 
+            margin: 0 auto 80px; 
+            padding: 40px; 
+            background: #73B580; 
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            width: calc(100% - 40px);
+        }
+
+        .welcome-bar {
+            display: none; background: rgba(255, 255, 255, 0.9); text-align: center; padding: 12px;
+            font-weight: 600; color: #155E2F; border-radius: 12px; margin-bottom: 24px; font-size: 14px;
+            word-break: break-all;
+        }
+
+        .list-title { font-size: 22px; color: white; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; }
+
+        /* 메인 필터 구역 크기 제한 */
+        .main-filter-section {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px; padding: 16px; margin-bottom: 32px; width: 100%; overflow: hidden;
+        }
+        .filter-group-title {
+            font-size: 11px; font-weight: 700; color: #E2F5E5; margin: 12px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .filter-group-title:first-child { margin-top: 0; }
+        
+        .main-filter-container {
+            display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; width: 100%;
+        }
+        
+        .btn-main-filter {
+            padding: 6px 12px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px; color: white; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-main-filter:hover { background: rgba(255, 255, 255, 0.3); }
+        .btn-main-filter.active {
+            background: #FFFFFF; color: #155E2F; font-weight: 700; border-color: #FFFFFF;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* 편지 카드 */
+        .letter-card {
+            background-color: #F3F8F2; border-radius: 16px; padding: 24px; margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 10px;
+            position: relative; animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card-header { display: flex; align-items: center; gap: 12px; }
+        .user-avatar { width: 44px; height: 44px; border-radius: 50%; background: #CBD5E1; overflow: hidden; }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .user-info { display: flex; flex-direction: column; }
+        .user-name { font-size: 17px; font-weight: 700; color: #1E293B; }
+        
+        .target-region-badge {
+            display: inline-block; background-color: #FFEAEB; color: #EF4444; 
+            padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 4px; align-self: flex-start;
+        }
+
+        .time-ago { font-size: 13px; color: #64748B; }
+        .letter-content { color: #334155; font-size: 15px; white-space: pre-line; margin-top: 4px; }
+        .card-options { position: absolute; top: 24px; right: 24px; color: #94A3B8; cursor: pointer; font-weight: bold; }
+        .card-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 10px; border-top: 1px solid #E2E8F0; padding-top: 12px; }
+        .action-btn { background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .edit-btn { color: #3b82f6; } .delete-btn { color: #ef4444; }
+        .empty-message { text-align: center; color: rgba(255, 255, 255, 0.7); padding: 50px 0; font-size: 15px; font-weight: 500; }
+
+        .btn-write-floating {
+            display: block; width: 100%; max-width: 200px; margin: 24px auto 0;
+            background-color: #288544; color: white; padding: 14px; border-radius: 12px;
+            font-weight: 600; font-size: 16px; border: none; cursor: pointer; text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.2s;
+        }
+        .btn-write-floating:hover { background-color: #1E6B34; transform: translateY(-1px); }
+
+        /* 팝업 모달창 구조 */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background-color: white; padding: 32px; border-radius: 12px; width: 92%; max-width: 550px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); animation: fadeIn 0.2s ease-out;
+            max-height: 85vh; overflow-y: auto;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        .modal-content h2 { font-size: 20px; color: #0F172A; margin-bottom: 16px; font-weight: 700; text-align: left; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; }
+        .modal-sub-title { font-size: 15px; font-weight: 700; color: #1E293B; margin-bottom: 4px; text-align: left; }
+        .modal-desc { font-size: 13px; color: #64748B; margin-bottom: 16px; text-align: left; }
+        
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #334155; }
+        
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; outline: none; background-color: #FFFFFF;
+        }
+        .form-group input:focus, .form-group textarea:focus { border-color: #318F50; }
+
+        .region-group-title {
+            font-size: 12px; font-weight: 700; color: #64748B; background: #F1F5F9; 
+            padding: 4px 8px; border-radius: 4px; margin: 12px 0 6px 0; display: inline-block;
+        }
+        .region-buttons-container {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 6px;
+        }
+        .btn-region-select {
+            display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #F8FAFC;
+            border: 1px solid #E2E8F0; border-radius: 8px; font-size: 13px; font-weight: 500; text-align: left;
+            cursor: pointer; transition: all 0.2s ease; color: #334155;
+        }
+        .btn-region-select:hover { background: #F1F5F9; border-color: #CBD5E1; }
+        .btn-region-select.active {
+            background: #E2F5E5; border-color: #318F50; color: #155E2F; font-weight: 600;
+        }
+        .btn-region-select .flag-icon { font-size: 18px; }
+        
+        .modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+        .btn-cancel { background-color: #FFFFFF; color: #1E293B; border: 1px solid #E2E8F0; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
+        .btn-login-submit { background-color: #1E293B; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
+        .btn-register-submit { background-color: #318F50; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
+
+        .google-login-separator {
+            display: flex; align-items: center; text-align: center; color: #94A3B8; font-size: 12px; font-weight: 600; margin: 16px 0;
+        }
+        .google-login-separator::before, .google-login-separator::after { content: ''; flex: 1; border-bottom: 1px solid #F1F5F9; }
+        
+        .btn-google-auth {
+            width: 100%; display: flex; align-items: center; justify-content: center; position: relative;
+            background-color: #FFFFFF; color: #334155; border: 1px solid #E2E8F0; padding: 12px;
+            border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer;
+        }
+        .google-icon-wrapper { position: absolute; left: 16px; display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; }
+        .google-icon { width: 18px; height: 18px; object-fit: contain; }
+        .switch-form-text { font-size: 13px; color: #64748B; text-align: center; margin-top: 16px; }
+        .switch-form-text span { color: #318F50; font-weight: 600; cursor: pointer; text-decoration: underline; margin-left: 4px; }
+
+        /* 📱 모바일 기기 반응형 레이아웃 분리 조율 */
+        @media (max-width: 768px) {
+            .bg-circle-pattern {
+                top: -200px;
+                width: 220vw;
+                height: 460px;
+            }
+            
+            header { padding: 40px 16px 20px; }
+            header h1 { font-size: 38px; }
+            header p { font-size: 14px; margin-bottom: 16px; }
+
+            /* 📱 모바일에서는 문구 아래 정중앙에 배치 */
+            .top-nav { 
+                position: relative; 
+                top: 0; 
+                bottom: 0;
+                right: 0; 
+                display: inline-block;
+                margin: 4px auto 0 auto;
+            }
+            .btn-top-login { 
+                padding: 8px 36px; 
+                font-size: 14px; 
+                background: rgba(255, 255, 255, 0.25);
+            }
+
+            .container { padding: 20px 14px 40px; margin: 10px auto 60px; border-radius: 16px; width: calc(100% - 24px); }
+            .list-title { font-size: 18px; margin-bottom: 16px; }
+            
+            .main-filter-section { padding: 12px; margin-bottom: 24px; width: 100%; }
+            .main-filter-container {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 8px;
+                width: 100%;
+                -webkit-overflow-scrolling: touch;
+            }
+            .main-filter-container::-webkit-scrollbar { height: 5px; }
+            .main-filter-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
+
+            .filter-group-title { font-size: 11px; margin: 12px 0 6px 0; }
+            .btn-main-filter { padding: 8px 14px; font-size: 12px; flex-shrink: 0; }
+
+            .letter-card { padding: 16px; border-radius: 12px; }
+            .user-name { font-size: 15px; }
+            .letter-content { font-size: 14px; }
+            
+            .modal-content { padding: 24px 16px; width: 95%; }
+            .region-buttons-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-circle-pattern"></div>
+
+    <header>
+        <h1>Safe-line</h1>
+        <p>세이프라인에서 따뜻한 한마디를 나눠보세요.</p>
+        <div class="top-nav">
+            <button class="btn-top-login" id="loginTriggerBtn">로그인</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-bar" id="welcomeBar"></div>
+        <div class="list-title">지역별 위로 편지 모아보기</div>
+        
+        <div class="main-filter-section">
+            <div class="main-filter-container" style="margin-bottom: 4px;">
+                <button class="btn-main-filter active" data-filter="all">✨ 전체 편지 보기</button>
+            </div>
+
+            <div class="filter-group-title">대규모 전면전 및 국제 전쟁 지대</div>
+            <div class="main-filter-container">
+                <button class="btn-main-filter" data-filter="🇺🇸🇮🇱 vs 🇮🇷 중동 분쟁지">🇺🇸🇮🇱🇮🇷 중동 분쟁지</button>
+                <button class="btn-main-filter" data-filter="🇺🇦 vs 🇷🇺 우크라이나 전선">🇺🇦🇷🇺 우크라이나 전선</button>
+            </div>
+
+            <div class="filter-group-title">고강도 내전 지대</div>
+            <div class="main-filter-container">
+                <button class="btn-main-filter" data-filter="🇸🇩 수단 내전지">🇸🇩 수단 내전지</button>
+                <button class="btn-main-filter" data-filter="🇲🇲 미얀마 저항선">🇲🇲 미얀마 저항선</button>
+                <button class="btn-main-filter" data-filter="🇸🇾 시리아 분쟁지">🇸🇾 시리아 분쟁지</button>
+                <button class="btn-main-filter" data-filter="🇸🇴 소말리아 전선">🇸🇴 소말리아 전선</button>
+            </div>
+
+            <div class="filter-group-title">국지적 충돌 및 무정부 지대</div>
+            <div class="main-filter-container">
+                <button class="btn-main-filter" data-filter="🇲🇱🇧🇫🇳🇪 사헬 무정부지">🇲🇱🇧🇫 사헬 무정부지</button>
+                <button class="btn-main-filter" data-filter="🇨🇩 콩고 동부지대">🇨🇩 콩고 동부지대</button>
+                <button class="btn-main-filter" data-filter="🇾🇪 예멘 홍해 공방지">🇾🇪 예멘 홍해 공방지</button>
+                <button class="btn-main-filter" data-filter="🇳🇬 나이지리아 북부">🇳🇬 나이지리아 북부</button>
+            </div>
+
+            <div class="filter-group-title">무장 카르텔 및 치안 불안 지대</div>
+            <div class="main-filter-container">
+                <button class="btn-main-filter" data-filter="🇭🇹 아이티 갱단 분쟁구역">🇭🇹 아이티 분쟁구역</button>
+                <button class="btn-main-filter" data-filter="🇲🇽 멕시코 카르텔 교전지">🇲🇽 멕시코 카르텔 교전지</button>
+            </div>
+        </div>
+
+        <div id="letterList"></div>
+        <button class="btn-write-floating" id="writeTriggerBtn">글쓰기</button>
+    </div>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <h2>Google 간편 로그인</h2>
+            <div class="modal-sub-title">간편 로그인</div>
+            <div class="modal-desc">세이프라인에서 따뜻한 한마디를 나눠보세요.</div>
+            
+            <button type="button" class="btn-google-auth" id="realGoogleLoginBtn">
+                <div class="google-icon-wrapper">
+                    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+                </div>
+                Google 계정으로 로그인
+            </button>
+
+            <div class="google-login-separator">또는 일반 로그인</div>
+
+            <form id="customLoginForm">
+                <div class="form-group">
+                    <label for="userId">아이디</label>
+                    <input type="text" id="userId" placeholder="아이디 입력" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPw">비밀번호</label>
+                    <input type="password" id="userPw" placeholder="비밀번호 입력" required>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeModal('loginModal')">취소</button>
+                    <button type="submit" class="btn-login-submit">로그인</button>
+                </div>
+                <div class="switch-form-text">아직 계정이 없으신가요?<span id="goToRegister">회원가입 하기</span></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-content">
+            <h2>새 계정 만들기</h2>
+            <div class="modal-sub-title">일반 회원가입</div>
+            <div class="modal-desc">세이프라인의 회원이 되어 따뜻한 위로를 전하세요.</div>
+
+            <form id="customRegisterForm">
+                <div class="form-group">
+                    <label for="regId">사용할 아이디</label>
+                    <input type="text" id="regId" placeholder="아이디를 설정하세요" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPw">비밀번호</label>
+                    <input type="password" id="regPw" placeholder="비밀번호 입력 (숫자, 특수문자 필수 포함)" required>
+                </div>
+                <div class="form-group">
+                    <label for="regNickname">기본 닉네임</label>
+                    <input type="text" id="regNickname" placeholder="편지에 표시될 기본 이름" required>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeModal('registerModal')">취소</button>
+                    <button type="submit" class="btn-register-submit">회원가입 완료</button>
+                </div>
+                <div class="switch-form-text">이미 계정이 있으신가요?<span id="goToLogin">로그인 하기</span></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="writeModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">따뜻한 마음 전하기</h2>
+            <form id="letterForm">
+                <input type="hidden" id="editId">
+                <input type="hidden" id="warRegion" required>
+
+                <div class="form-group">
+                    <label for="nickname">닉네임</label>
+                    <input type="text" id="nickname" placeholder="이름을 입력해 주세요" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>위로를 전할 분쟁 지역 선택</label>
+                    
+                    <div class="region-group-title">대규모 전면전 및 국제 전쟁 지대</div>
+                    <div class="region-buttons-container">
+                        <button type="button" class="btn-region-select" data-value="🇺🇸🇮🇱 vs 🇮🇷 중동 분쟁지">
+                            <span class="flag-icon">🇺🇸🇮🇱🇮🇷</span> 중동 분쟁 지대
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇺🇦 vs 🇷🇺 우크라이나 전선">
+                            <span class="flag-icon">🇺🇦🇷🇺</span> 우크라이나 전선
+                        </button>
+                    </div>
+
+                    <div class="region-group-title">고강도 내전 지대</div>
+                    <div class="region-buttons-container">
+                        <button type="button" class="btn-region-select" data-value="🇸🇩 수단 내전지">
+                            <span class="flag-icon">🇸🇩</span> 수단 내전지
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇲🇲 미얀마 저항선">
+                            <span class="flag-icon">🇲🇲</span> 미얀마 저항선
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇸🇾 시리아 분쟁지">
+                            <span class="flag-icon">🇸🇾</span> 시리아 분쟁지
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇸🇴 소말리아 전선">
+                            <span class="flag-icon">🇸🇴</span> 소말리아 전선
+                        </button>
+                    </div>
+
+                    <div class="region-group-title">국지적 충돌 및 무정부 지대</div>
+                    <div class="region-buttons-container">
+                        <button type="button" class="btn-region-select" data-value="🇲🇱🇧🇫🇳🇪 사헬 무정부지">
+                            <span class="flag-icon">🇲🇱🇧🇫</span> 사헬 무정부지
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇨🇩 콩고 동부지대">
+                            <span class="flag-icon">🇨🇩</span> 콩고 동부지대
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇾🇪 예멘 홍해 공방지">
+                            <span class="flag-icon">🇾🇪</span> 예멘 홍해 공방지
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇳🇬 나이지리아 북부">
+                            <span class="flag-icon">🇳🇬</span> 나이지리아 북부
+                        </button>
+                    </div>
+
+                    <div class="region-group-title">무장 카르텔 및 치안 불안 지대</div>
+                    <div class="region-buttons-container">
+                        <button type="button" class="btn-region-select" data-value="🇭🇹 아이티 갱단 분쟁구역">
+                            <span class="flag-icon">🇭🇹</span> 아이티 분쟁구역
+                        </button>
+                        <button type="button" class="btn-region-select" data-value="🇲🇽 멕시코 카르텔 교전지">
+                            <span class="flag-icon">🇲🇽</span> 멕시코 카르텔 교전지
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:20px;">
+                    <label for="content">메시지 내용</label>
+                    <textarea id="content" rows="4" placeholder="그곳에서 고통받고 있는 무고한 이들을 향한 따뜻한 위로와 평화의 메시지를 적어주세요" required></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeModal('writeModal')">취소</button>
+                    <button type="submit" class="btn-submit" id="submitBtn" style="background-color: #318F50; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">보내기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAW0_JUF1s4cgSDDmVJNGsSOFYYsidQMhg",
+            authDomain: "safe-line-83fd0.firebaseapp.com",
+            projectId: "safe-line-83fd0",
+            storageBucket: "safe-line-83fd0.firebasestorage.app",
+            messagingSenderId: "736258921309",
+            appId: "1:736258921309:web:ea7efcdb8eccb9bf618eb4",
+            measurementId: "G-P0BED3BRMV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        let loginType = null; 
+        let currentUserDisplay = null; 
+        let currentUserUniqueKey = null; 
+        let currentUserPhoto = null; 
+        let userProfileData = { nickname: '' };
+        
+        let currentFilter = 'all';
+
+        let letters = JSON.parse(localStorage.getItem('letters')) || [];
+        let customUsers = JSON.parse(localStorage.getItem('customUsers')) || {};
+
+        const savedCustomUser = localStorage.getItem('customUserKey');
+        if (savedCustomUser && customUsers[savedCustomUser]) {
+            loginType = 'custom';
+            currentUserUniqueKey = savedCustomUser;
+            currentUserDisplay = customUsers[savedCustomUser].nickname;
+            userProfileData.nickname = customUsers[savedCustomUser].nickname;
+            currentUserPhoto = null;
+            updateUI();
+            renderLetters();
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (loginType === 'custom') return;
+            
+            if (user) {
+                loginType = 'google';
+                currentUserDisplay = user.displayName || "구글 사용자";
+                currentUserUniqueKey = user.email;
+                currentUserPhoto = user.photoURL;
+                userProfileData.nickname = user.displayName || "구글 사용자";
+            } else {
+                if (loginType === 'google') {
+                    loginType = null; currentUserDisplay = null; currentUserUniqueKey = null; currentUserPhoto = null;
+                }
+            }
+            updateUI();
+            renderLetters();
+        });
+
+        window.openModal = function(id) { document.getElementById(id).style.display = 'flex'; }
+        window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
+
+        document.getElementById('goToRegister').addEventListener('click', () => { closeModal('loginModal'); openModal('registerModal'); });
+        document.getElementById('goToLogin').addEventListener('click', () => { closeModal('registerModal'); openModal('loginModal'); });
+
+        const regionButtons = document.querySelectorAll('.btn-region-select');
+        const hiddenRegionInput = document.getElementById('warRegion');
+
+        regionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                regionButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                hiddenRegionInput.value = button.getAttribute('data-value');
+            });
+        });
+
+        const mainFilterButtons = document.querySelectorAll('.btn-main-filter');
+        mainFilterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                mainFilterButtons.forEach(f => f.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                renderLetters();
+            });
+        });
+
+        function updateUI() {
+            const loginBtn = document.getElementById('loginTriggerBtn');
+            const welcomeBar = document.getElementById('welcomeBar');
+
+            if (currentUserUniqueKey) {
+                loginBtn.textContent = "로그아웃";
+                welcomeBar.style.display = 'block';
+                welcomeBar.textContent = loginType === 'google' 
+                    ? `🌐 구글 인증: ${currentUserDisplay}`
+                    : `🔒 일반 회원: ${currentUserDisplay}님`;
+            } else {
+                loginBtn.textContent = "로그인";
+                welcomeBar.style.display = 'none';
+            }
+        }
+
+        document.getElementById('loginTriggerBtn').addEventListener('click', async () => {
+            if (currentUserUniqueKey) {
+                if (loginType === 'google') {
+                    await signOut(auth);
+                } else {
+                    localStorage.removeItem('customUserKey');
+                }
+                loginType = null; currentUserDisplay = null; currentUserUniqueKey = null; currentUserPhoto = null;
+                alert('로그아웃 되었습니다.');
+                updateUI();
+                renderLetters();
+            } else {
+                openModal('loginModal');
+            }
+        });
+
+        document.getElementById('realGoogleLoginBtn').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                loginType = 'google';
+                currentUserDisplay = result.user.displayName;
+                currentUserUniqueKey = result.user.email;
+                currentUserPhoto = result.user.photoURL;
+                
+                localStorage.removeItem('customUserKey');
+                closeModal('loginModal');
+                alert(`환영합니다, ${currentUserDisplay}님! ✨`);
+                updateUI();
+                renderLetters();
+            } catch (error) {
+                console.error(error);
+                alert(`로그인 오류: ${error.message}`);
+            }
+        });
+
+        document.getElementById('customLoginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('userId').value.trim();
+            const pw = document.getElementById('userPw').value;
+
+            if (!customUsers[id] || customUsers[id].password !== pw) {
+                alert('아이디 혹은 비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            loginType = 'custom';
+            currentUserUniqueKey = id;
+            currentUserDisplay = customUsers[id].nickname;
+            userProfileData.nickname = customUsers[id].nickname;
+            currentUserPhoto = null;
+            localStorage.setItem('customUserKey', id);
+            signOut(auth).catch(()=>{});
+
+            closeModal('loginModal');
+            document.getElementById('customLoginForm').reset();
+            updateUI();
+            renderLetters();
+        });
+
+        document.getElementById('customRegisterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('regId').value.trim();
+            const pw = document.getElementById('regPw').value;
+            const nickname = document.getElementById('regNickname').value.trim();
+
+            const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+            if (!passwordRegex.test(pw)) {
+                alert('🔒 보안을 위해 비밀번호에는 숫자와 특수문자가 각각 최소 1개 이상 포함되어야 합니다! (최소 8자 이상)');
+                return;
+            }
+
+            if (customUsers[id]) {
+                alert('이미 가입되어 사용 중인 아이디입니다.');
+                return;
+            }
+
+            customUsers[id] = { password: pw, nickname };
+            localStorage.setItem('customUsers', JSON.stringify(customUsers));
+
+            loginType = 'custom';
+            currentUserUniqueKey = id;
+            currentUserDisplay = nickname;
+            userProfileData.nickname = nickname;
+            currentUserPhoto = null;
+            localStorage.setItem('customUserKey', id);
+            signOut(auth).catch(()=>{});
+
+            closeModal('registerModal');
+            document.getElementById('customRegisterForm').reset();
+            alert('🎉 회원가입이 완료되었습니다!');
+            updateUI();
+            renderLetters();
+        });
+
+        document.getElementById('writeTriggerBtn').addEventListener('click', () => {
+            if (!currentUserUniqueKey) {
+                alert('로그인이 필요한 서비스입니다.');
+                openModal('loginModal');
+                return;
+            }
+            document.getElementById('modalTitle').textContent = '따뜻한 마음 전하기';
+            document.getElementById('editId').value = '';
+            document.getElementById('letterForm').reset();
+            
+            regionButtons.forEach(btn => btn.classList.remove('active'));
+            hiddenRegionInput.value = '';
+
+            document.getElementById('nickname').value = userProfileData.nickname || '';
+            openModal('writeModal');
+        });
+
+        document.getElementById('letterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('editId').value;
+            const nickname = document.getElementById('nickname').value;
+            const warRegion = hiddenRegionInput.value;
+            const content = document.getElementById('content').value;
+
+            if (!warRegion) {
+                alert('위로를 전할 분쟁 지역 버튼을 선택해 주세요!');
+                return;
+            }
+
+            if (editId) {
+                const letter = letters.find(l => l.id == editId);
+                if (letter && letter.writer === currentUserUniqueKey) {
+                    letter.nickname = nickname;
+                    letter.warRegion = warRegion;
+                    letter.content = content;
+                }
+            } else {
+                letters.unshift({
+                    id: Date.now(),
+                    writer: currentUserUniqueKey,
+                    nickname,
+                    warRegion,
+                    content,
+                    timeStr: "방금 전",
+                    photoURL: currentUserPhoto
+                });
+            }
+            localStorage.setItem('letters', JSON.stringify(letters));
+            closeModal('writeModal');
+            
+            currentFilter = warRegion;
+            mainFilterButtons.forEach(b => {
+                if(b.getAttribute('data-filter') === warRegion) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+
+            renderLetters();
+        });
+
+        window.editLetter = function(id) {
+            const letter = letters.find(l => l.id == id);
+            if (!letter || letter.writer !== currentUserUniqueKey) return;
+            document.getElementById('modalTitle').textContent = '편지 수정하기';
+            document.getElementById('editId').value = letter.id;
+            document.getElementById('nickname').value = letter.nickname;
+            document.getElementById('content').value = letter.content;
+            
+            hiddenRegionInput.value = letter.warRegion || '';
+            regionButtons.forEach(btn => {
+                if (btn.getAttribute('data-value') === letter.warRegion) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            openModal('writeModal');
+        }
+
+        window.deleteLetter = function(id) {
+            const letter = letters.find(l => l.id == id);
+            if (!letter || letter.writer !== currentUserUniqueKey) return;
+            if (confirm('메시지를 완전히 삭제할까요?')) {
+                letters = letters.filter(l => l.id !== id);
+                localStorage.setItem('letters', JSON.stringify(letters));
+                renderLetters();
+            }
+        }
+
+        function renderLetters() {
+            const container = document.getElementById('letterList');
+            container.innerHTML = '';
+
+            const filteredLetters = currentFilter === 'all'
+                ? letters
+                : letters.filter(l => l.warRegion === currentFilter);
+
+            if (filteredLetters.length === 0) {
+                container.innerHTML = '<div class="empty-message">선택하신 지역에 도착한 위로의 편지가 아직 없습니다. 첫 메시지를 선물해 보세요! ✨</div>';
+                return;
+            }
+
+            filteredLetters.forEach(letter => {
+                const card = document.createElement('div');
+                card.className = 'letter-card';
+                let actionBtnHtml = '';
+                if (currentUserUniqueKey && letter.writer === currentUserUniqueKey) {
+                    actionBtnHtml = `
+                        <div class="card-actions">
+                            <button class="action-btn edit-btn" onclick="editLetter(${letter.id})">수정</button>
+                            <button class="action-btn delete-btn" onclick="deleteLetter(${letter.id})">삭제</button>
+                        </div>
+                    `;
+                }
+
+                let avatarHtml = `<div style="background: #9BBF9E; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:18px; width:100%; height:100%;">${escapeHtml(letter.nickname[0] || 'P')}</div>`;
+                if (letter.photoURL) {
+                    avatarHtml = `<img src="${letter.photoURL}" alt="Profile">`;
+                }
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="user-avatar">
+                            ${avatarHtml}
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">${escapeHtml(letter.nickname)}</span>
+                            <span class="time-ago">${letter.timeStr || '방금 전'}</span>
+                        </div>
+                    </div>
+                    <div class="target-region-badge">To. ${escapeHtml(letter.warRegion || '지정되지 않은 분쟁지역')}</div>
+                    <div class="card-options">•••</div>
+                    <p class="letter-content" style="margin-top:8px;">${escapeHtml(letter.content)}</p>
+                    ${actionBtnHtml}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        renderLetters();
+    </script>
+</body>
+</html>
