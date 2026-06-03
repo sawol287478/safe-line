@@ -55,7 +55,7 @@
             padding: 8px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
             backdrop-filter: blur(4px); transition: all 0.2s;
         }
-        .btn-top-login:hover { background: rgba(255,255,255,0.35); }
+        .btn-top-login:hover { background: rgba(255, 255, 255, 0.35); }
 
         .container { 
             position: relative;
@@ -157,10 +157,10 @@
         .form-group { margin-bottom: 16px; text-align: left; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #334155; }
         
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; outline: none; background-color: #FFFFFF;
         }
-        .form-group input:focus, .form-group textarea:focus { border-color: #318F50; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #318F50; }
 
         .region-group-title {
             font-size: 12px; font-weight: 700; color: #64748B; background: #F1F5F9; 
@@ -197,8 +197,16 @@
         }
         .google-icon-wrapper { position: absolute; left: 16px; display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; }
         .google-icon { width: 18px; height: 18px; object-fit: contain; }
+        
         .switch-form-text { font-size: 13px; color: #64748B; text-align: center; margin-top: 16px; }
         .switch-form-text span { color: #318F50; font-weight: 600; cursor: pointer; text-decoration: underline; margin-left: 4px; }
+
+        /* 하단 계정 찾기 링크 정렬 */
+        .find-account-links {
+            display: flex; justify-content: center; gap: 12px; margin-top: 14px; font-size: 12px; color: #64748B;
+        }
+        .find-account-links span { cursor: pointer; transition: color 0.2s; }
+        .find-account-links span:hover { color: #1E293B; text-decoration: underline; }
 
         /* 📱 모바일 기기 반응형 레이아웃 분리 조율 */
         @media (max-width: 768px) {
@@ -212,7 +220,6 @@
             header h1 { font-size: 38px; }
             header p { font-size: 14px; margin-bottom: 16px; }
 
-            /* 📱 모바일에서는 문구 아래 정중앙에 배치 */
             .top-nav { 
                 position: relative; 
                 top: 0; 
@@ -338,6 +345,13 @@
                     <button type="button" class="btn-cancel" onclick="closeModal('loginModal')">취소</button>
                     <button type="submit" class="btn-login-submit">로그인</button>
                 </div>
+
+                <div class="find-account-links">
+                    <span id="goToFindId">아이디 찾기</span>
+                    <span>|</span>
+                    <span id="goToFindPw">비밀번호 찾기</span>
+                </div>
+
                 <div class="switch-form-text">아직 계정이 없으신가요?<span id="goToRegister">회원가입 하기</span></div>
             </form>
         </div>
@@ -362,12 +376,64 @@
                     <label for="regNickname">기본 닉네임</label>
                     <input type="text" id="regNickname" placeholder="편지에 표시될 기본 이름" required>
                 </div>
+                <div class="form-group">
+                    <label for="regEmail">이메일 주소</label>
+                    <input type="email" id="regEmail" placeholder="example@email.com" required>
+                </div>
                 
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" onclick="closeModal('registerModal')">취소</button>
                     <button type="submit" class="btn-register-submit">회원가입 완료</button>
                 </div>
                 <div class="switch-form-text">이미 계정이 있으신가요?<span id="goToLogin">로그인 하기</span></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="findIdModal">
+        <div class="modal-content">
+            <h2>아이디 찾기</h2>
+            <div class="modal-sub-title">닉네임과 이메일로 매칭</div>
+            <div class="modal-desc">회원가입 시 등록하셨던 닉네임과 이메일 주소를 입력해 주세요.</div>
+
+            <form id="findIdForm">
+                <div class="form-group">
+                    <label for="findIdNickname">닉네임</label>
+                    <input type="text" id="findIdNickname" placeholder="등록한 닉네임 입력" required>
+                </div>
+                <div class="form-group">
+                    <label for="findIdEmail">가입 이메일 주소</label>
+                    <input type="email" id="findIdEmail" placeholder="가입한 이메일 입력" required>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeModal('findIdModal'); openModal('loginModal');">돌아가기</button>
+                    <button type="submit" class="btn-login-submit" style="background-color: #318F50;">아이디 찾기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="findPwModal">
+        <div class="modal-content">
+            <h2>비밀번호 찾기</h2>
+            <div class="modal-sub-title">아이디와 이메일로 매칭</div>
+            <div class="modal-desc">본인의 아이디와 회원가입 시 기재했던 이메일 주소가 매칭되면 비밀번호를 알려드립니다.</div>
+
+            <form id="findPwForm">
+                <div class="form-group">
+                    <label for="findPwId">아이디</label>
+                    <input type="text" id="findPwId" placeholder="아이디 입력" required>
+                </div>
+                <div class="form-group">
+                    <label for="findPwEmail">가입 이메일 주소</label>
+                    <input type="email" id="findPwEmail" placeholder="가입한 이메일 입력" required>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeModal('findPwModal'); openModal('loginModal');">돌아가기</button>
+                    <button type="submit" class="btn-login-submit" style="background-color: #318F50;">비밀번호 조회</button>
+                </div>
             </form>
         </div>
     </div>
@@ -455,7 +521,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAW0_JUF1s4cgSDDmVJNGsSOFYYsidQMhg",
@@ -470,7 +535,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        const db = getFirestore(app);
 
         let loginType = null; 
         let currentUserDisplay = null; 
@@ -480,7 +544,7 @@
         
         let currentFilter = 'all';
 
-        let letters = [];
+        let letters = JSON.parse(localStorage.getItem('letters')) || [];
         let customUsers = JSON.parse(localStorage.getItem('customUsers')) || {};
 
         const savedCustomUser = localStorage.getItem('customUserKey');
@@ -491,6 +555,7 @@
             userProfileData.nickname = customUsers[savedCustomUser].nickname;
             currentUserPhoto = null;
             updateUI();
+            renderLetters();
         }
 
         onAuthStateChanged(auth, (user) => {
@@ -508,6 +573,7 @@
                 }
             }
             updateUI();
+            renderLetters();
         });
 
         window.openModal = function(id) { document.getElementById(id).style.display = 'flex'; }
@@ -515,6 +581,9 @@
 
         document.getElementById('goToRegister').addEventListener('click', () => { closeModal('loginModal'); openModal('registerModal'); });
         document.getElementById('goToLogin').addEventListener('click', () => { closeModal('registerModal'); openModal('loginModal'); });
+        
+        document.getElementById('goToFindId').addEventListener('click', () => { closeModal('loginModal'); openModal('findIdModal'); });
+        document.getElementById('goToFindPw').addEventListener('click', () => { closeModal('loginModal'); openModal('findPwModal'); });
 
         const regionButtons = document.querySelectorAll('.btn-region-select');
         const hiddenRegionInput = document.getElementById('warRegion');
@@ -563,6 +632,7 @@
                 loginType = null; currentUserDisplay = null; currentUserUniqueKey = null; currentUserPhoto = null;
                 alert('로그아웃 되었습니다.');
                 updateUI();
+                renderLetters();
             } else {
                 openModal('loginModal');
             }
@@ -580,6 +650,7 @@
                 closeModal('loginModal');
                 alert(`환영합니다, ${currentUserDisplay}님! ✨`);
                 updateUI();
+                renderLetters();
             } catch (error) {
                 console.error(error);
                 alert(`로그인 오류: ${error.message}`);
@@ -607,6 +678,7 @@
             closeModal('loginModal');
             document.getElementById('customLoginForm').reset();
             updateUI();
+            renderLetters();
         });
 
         document.getElementById('customRegisterForm').addEventListener('submit', (e) => {
@@ -614,6 +686,7 @@
             const id = document.getElementById('regId').value.trim();
             const pw = document.getElementById('regPw').value;
             const nickname = document.getElementById('regNickname').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
 
             const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
@@ -627,7 +700,8 @@
                 return;
             }
 
-            customUsers[id] = { password: pw, nickname };
+            // 질문 대신 이메일 정보 저장
+            customUsers[id] = { password: pw, nickname, email };
             localStorage.setItem('customUsers', JSON.stringify(customUsers));
 
             loginType = 'custom';
@@ -642,6 +716,48 @@
             document.getElementById('customRegisterForm').reset();
             alert('🎉 회원가입이 완료되었습니다!');
             updateUI();
+            renderLetters();
+        });
+
+        // 🔍 아이디 찾기 (닉네임 + 이메일 검증 방식)
+        document.getElementById('findIdForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nickname = document.getElementById('findIdNickname').value.trim();
+            const email = document.getElementById('findIdEmail').value.trim();
+            
+            let foundId = null;
+            for (const id in customUsers) {
+                if (customUsers[id].nickname === nickname && customUsers[id].email === email) {
+                    foundId = id;
+                    break;
+                }
+            }
+
+            if (foundId) {
+                alert(`💡 회원 정보를 찾았습니다!\n\n회원님의 아이디는 [ ${foundId} ] 입니다.`);
+                closeModal('findIdModal');
+                openModal('loginModal');
+                document.getElementById('userId').value = foundId;
+            } else {
+                alert('❌ 입력하신 닉네임과 이메일 주소가 매칭되는 계정이 없습니다.');
+            }
+        });
+
+        // 🔍 비밀번호 찾기 (아이디 + 이메일 검증 방식)
+        document.getElementById('findPwForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('findPwId').value.trim();
+            const email = document.getElementById('findPwEmail').value.trim();
+
+            if (customUsers[id] && customUsers[id].email === email) {
+                alert(`🔒 본인 인증 완료!\n\n회원님의 비밀번호는 [ ${customUsers[id].password} ] 입니다.`);
+                closeModal('findPwModal');
+                openModal('loginModal');
+                document.getElementById('userId').value = id;
+                document.getElementById('userPw').value = customUsers[id].password;
+            } else {
+                alert('❌ 존재하지 않는 아이디이거나 입력하신 이메일 주소가 정보와 다릅니다.');
+            }
         });
 
         document.getElementById('writeTriggerBtn').addEventListener('click', () => {
@@ -661,7 +777,7 @@
             openModal('writeModal');
         });
 
-        document.getElementById('letterForm').addEventListener('submit', async (e) => {
+        document.getElementById('letterForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const editId = document.getElementById('editId').value;
             const nickname = document.getElementById('nickname').value;
@@ -673,37 +789,34 @@
                 return;
             }
 
-            try {
-                if (editId) {
-                    // 서버 문서 업데이트
-                    const docRef = doc(db, "letters", editId);
-                    await updateDoc(docRef, {
-                        nickname: nickname,
-                        warRegion: warRegion,
-                        content: content
-                    });
-                } else {
-                    // 서버에 새 편지 추가
-                    await addDoc(collection(db, "letters"), {
-                        writer: currentUserUniqueKey,
-                        nickname: nickname,
-                        warRegion: warRegion,
-                        content: content,
-                        photoURL: currentUserPhoto,
-                        createdAt: Date.now()
-                    });
+            if (editId) {
+                const letter = letters.find(l => l.id == editId);
+                if (letter && letter.writer === currentUserUniqueKey) {
+                    letter.nickname = nickname;
+                    letter.warRegion = warRegion;
+                    letter.content = content;
                 }
-                closeModal('writeModal');
-                
-                currentFilter = warRegion;
-                mainFilterButtons.forEach(b => {
-                    if(b.getAttribute('data-filter') === warRegion) b.classList.add('active');
-                    else b.classList.remove('active');
+            } else {
+                letters.unshift({
+                    id: Date.now(),
+                    writer: currentUserUniqueKey,
+                    nickname,
+                    warRegion,
+                    content,
+                    timeStr: "방금 전",
+                    photoURL: currentUserPhoto
                 });
-            } catch (error) {
-                console.error("서버 데이터 송신 실패:", error);
-                alert("서버 전송 오류가 발생했습니다. 파이어베이스 Firestore 설정을 완료해 주세요.");
             }
+            localStorage.setItem('letters', JSON.stringify(letters));
+            closeModal('writeModal');
+            
+            currentFilter = warRegion;
+            mainFilterButtons.forEach(b => {
+                if(b.getAttribute('data-filter') === warRegion) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+
+            renderLetters();
         });
 
         window.editLetter = function(id) {
@@ -726,37 +839,15 @@
             openModal('writeModal');
         }
 
-        window.deleteLetter = async function(id) {
+        window.deleteLetter = function(id) {
             const letter = letters.find(l => l.id == id);
             if (!letter || letter.writer !== currentUserUniqueKey) return;
             if (confirm('메시지를 완전히 삭제할까요?')) {
-                try {
-                    await deleteDoc(doc(db, "letters", id));
-                } catch(error) {
-                    alert("삭제 실패: " + error.message);
-                }
+                letters = letters.filter(l => l.id !== id);
+                localStorage.setItem('letters', JSON.stringify(letters));
+                renderLetters();
             }
         }
-
-        // 파이어베이스 Firestore 실시간 리스너 연결
-        const q = query(collection(db, "letters"), orderBy("createdAt", "desc"));
-        onSnapshot(q, (snapshot) => {
-            letters = [];
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                letters.push({
-                    id: doc.id,
-                    ...data,
-                    timeStr: "방금 전" 
-                });
-            });
-            renderLetters();
-        }, (error) => {
-            console.error("실시간 수신 오류:", error);
-            // Firestore가 준비되지 않았을 때는 로컬 데이터 안내 메시지 표시
-            const container = document.getElementById('letterList');
-            container.innerHTML = '<div class="empty-message">서버 데이터베이스가 생성되는 중이거나 비어있습니다. 파이어베이스 콘솔에서 [데이터베이스 만들기]를 완료해 주세요! ✨</div>';
-        });
 
         function renderLetters() {
             const container = document.getElementById('letterList');
@@ -778,13 +869,13 @@
                 if (currentUserUniqueKey && letter.writer === currentUserUniqueKey) {
                     actionBtnHtml = `
                         <div class="card-actions">
-                            <button class="action-btn edit-btn" onclick="editLetter('${letter.id}')">수정</button>
-                            <button class="action-btn delete-btn" onclick="deleteLetter('${letter.id}')">삭제</button>
+                            <button class="action-btn edit-btn" onclick="editLetter(${letter.id})">수정</button>
+                            <button class="action-btn delete-btn" onclick="deleteLetter(${letter.id})">삭제</button>
                         </div>
                     `;
                 }
 
-                let avatarHtml = `<div style="background: #9BBF9E; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:18px; width:100%; height:100%;">${escapeHtml(letter.nickname ? letter.nickname[0] : 'P')}</div>`;
+                let avatarHtml = `<div style="background: #9BBF9E; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:18px; width:100%; height:100%;">${escapeHtml(letter.nickname[0] || 'P')}</div>`;
                 if (letter.photoURL) {
                     avatarHtml = `<img src="${letter.photoURL}" alt="Profile">`;
                 }
@@ -795,13 +886,13 @@
                             ${avatarHtml}
                         </div>
                         <div class="user-info">
-                            <span class="user-name">${escapeHtml(letter.nickname || '익명')}</span>
+                            <span class="user-name">${escapeHtml(letter.nickname)}</span>
                             <span class="time-ago">${letter.timeStr || '방금 전'}</span>
                         </div>
                     </div>
                     <div class="target-region-badge">To. ${escapeHtml(letter.warRegion || '지정되지 않은 분쟁지역')}</div>
                     <div class="card-options">•••</div>
-                    <p class="letter-content" style="margin-top:8px;">${escapeHtml(letter.content || '')}</p>
+                    <p class="letter-content" style="margin-top:8px;">${escapeHtml(letter.content)}</p>
                     ${actionBtnHtml}
                 `;
                 container.appendChild(card);
@@ -809,9 +900,10 @@
         }
 
         function escapeHtml(text) {
-            if(!text) return '';
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
+
+        renderLetters();
     </script>
 </body>
 </html>
