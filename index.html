@@ -21,433 +21,398 @@
             transform: translateX(-50%);
             width: 140vw;
             height: 750px;
-            background: radial-gradient(circle, #74BA82 0%, #318F50 70%, #22743C 100%);
+            background: radial-gradient(circle, #2A5A44 0%, #173827 60%, transparent 100%);
             border-radius: 50%;
             z-index: 1;
+            opacity: 0.95;
         }
 
-        /* 헤더 기본 스타일 (PC 기준) */
-        header {
+        /* 메인 컨테이너 레이아웃 */
+        .app-container {
             position: relative;
-            z-index: 2;
-            max-width: 900px;
+            z-index: 10;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 80px 20px 40px;
-            text-align: center;
-            color: white;
-            width: 100%;
+            padding: 24px 16px 100px 16px;
+        }
+
+        /* 🌟 로고 헤더 구역 스타일 고도화 */
+        .app-header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
+            margin-top: 12px;
+            margin-bottom: 32px;
+            color: #FFFFFF;
         }
-        header h1 { font-size: 56px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
-        header p { font-size: 18px; color: #E2F5E5; font-weight: 400; opacity: 0.9; }
+        .brand-zone {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* 로고 이미지가 들어갈 원형 프레임 */
+        .brand-logo-frame {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .brand-logo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .brand-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .global-login-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+        .global-login-btn:hover { background-color: rgba(255, 255, 255, 0.3); }
 
-        /* 💻 데스크톱(PC) 로그인 버튼 위치 설정 */
-        .top-nav { 
-            position: absolute; 
-            bottom: 45px; 
-            right: 20px; 
-            z-index: 3; 
-        }
-        .btn-top-login {
-            background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 8px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
-            backdrop-filter: blur(4px); transition: all 0.2s;
-        }
-        .btn-top-login:hover { background: rgba(255,255,255,0.35); }
-
-        .container { 
-            position: relative;
-            z-index: 2;
-            max-width: 900px; 
-            margin: 0 auto 80px; 
-            padding: 40px; 
-            background: #73B580; 
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            width: calc(100% - 40px);
+        /* 웰컴 인포 보드 */
+        .welcome-info-bar {
+            background-color: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #E2EEDF;
+            font-size: 13px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(4px);
+            display: none;
+            text-align: center;
         }
 
-        .welcome-bar {
-            display: none; background: rgba(255, 255, 255, 0.9); text-align: center; padding: 12px;
-            font-weight: 600; color: #155E2F; border-radius: 12px; margin-bottom: 24px; font-size: 14px;
-            word-break: break-all;
+        /* 상단 전광판 인트로 */
+        .intro-board {
+            color: #FFFFFF;
+            margin-bottom: 36px;
+            text-align: center;
         }
+        .intro-board h1 { font-size: 28px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; letter-spacing: -1px; }
+        .intro-board p { font-size: 14px; color: #A3C9A8; font-weight: 400; word-break: keep-all; }
 
-        .list-title { font-size: 22px; color: white; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; }
-
-        /* 메인 필터 구역 크기 제한 */
-        .main-filter-section {
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px; padding: 16px; margin-bottom: 32px; width: 100%; overflow: hidden;
+        /* 대분류 필터 스크롤 구역 */
+        .filter-scroll-wrapper {
+            margin: 0 -16px 28px -16px;
+            padding: 0 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
         }
-        .filter-group-title {
-            font-size: 11px; font-weight: 700; color: #E2F5E5; margin: 12px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .filter-group-title:first-child { margin-top: 0; }
-        
-        .main-filter-container {
-            display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; width: 100%;
-        }
+        .filter-scroll-wrapper::-webkit-scrollbar { display: none; }
         
         .btn-main-filter {
-            padding: 6px 12px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px; color: white; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s;
-            white-space: nowrap;
+            display: inline-block;
+            background-color: #FFFFFF;
+            color: #475569;
+            border: 1px solid #CBD5E1;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
         }
-        .btn-main-filter:hover { background: rgba(255, 255, 255, 0.3); }
         .btn-main-filter.active {
-            background: #FFFFFF; color: #155E2F; font-weight: 700; border-color: #FFFFFF;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background-color: #173827;
+            color: #FFFFFF;
+            border-color: #173827;
+            box-shadow: 0 4px 8px rgba(23, 56, 39, 0.2);
         }
 
-        /* 편지 카드 */
+        /* 편지 카드 리스트 출력관 */
+        .letters-feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
         .letter-card {
-            background-color: #F3F8F2; border-radius: 16px; padding: 24px; margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 10px;
-            position: relative; animation: slideUp 0.3s ease-out;
+            position: relative;
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0,0,0,0.02);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card-header { display: flex; align-items: center; gap: 12px; }
-        .user-avatar { width: 44px; height: 44px; border-radius: 50%; background: #CBD5E1; overflow: hidden; }
+        .card-header { display: flex; align-items: center; margin-bottom: 12px; }
+        .user-avatar { width: 38px; height: 38px; border-radius: 50%; overflow: hidden; margin-right: 10px; background-color: #F1F5F9; border: 1px solid #E2E8F0; }
         .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        
         .user-info { display: flex; flex-direction: column; }
-        .user-name { font-size: 17px; font-weight: 700; color: #1E293B; }
-        
+        .user-name { font-size: 14px; font-weight: 600; color: #1E293B; }
+        .time-ago { font-size: 11px; color: #94A3B8; margin-top: 1px; }
+
         .target-region-badge {
-            display: inline-block; background-color: #FFEAEB; color: #EF4444; 
-            padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 4px; align-self: flex-start;
+            display: inline-block;
+            background-color: #F0FDF4;
+            color: #166534;
+            border: 1px solid #DCFCE7;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
         }
 
-        .time-ago { font-size: 13px; color: #64748B; }
-        .letter-content { color: #334155; font-size: 15px; white-space: pre-line; margin-top: 4px; }
-        .card-options { position: absolute; top: 24px; right: 24px; color: #94A3B8; cursor: pointer; font-weight: bold; }
-        .card-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 10px; border-top: 1px solid #E2E8F0; padding-top: 12px; }
-        .action-btn { background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; }
-        .edit-btn { color: #3b82f6; } .delete-btn { color: #ef4444; }
-        .empty-message { text-align: center; color: rgba(255, 255, 255, 0.7); padding: 50px 0; font-size: 15px; font-weight: 500; }
-
-        .btn-write-floating {
-            display: block; width: 100%; max-width: 200px; margin: 24px auto 0;
-            background-color: #288544; color: white; padding: 14px; border-radius: 12px;
-            font-weight: 600; font-size: 16px; border: none; cursor: pointer; text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.2s;
+        .letter-content {
+            font-size: 15px;
+            color: #334155;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.6;
         }
-        .btn-write-floating:hover { background-color: #1E6B34; transform: translateY(-1px); }
 
-        /* 팝업 모달창 구조 */
+        .card-options { position: absolute; top: 20px; right: 20px; color: #94A3B8; font-size: 14px; cursor: pointer; }
+        
+        /* 카드 제어 박스 */
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px dashed #E2E8F0;
+        }
+        .action-btn {
+            background: none; border: none; font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 8px;
+        }
+        .edit-btn { color: #2563EB; }
+        .delete-btn { color: #EF4444; }
+
+        .empty-message {
+            text-align: center; padding: 60px 20px; color: #64748B; font-size: 14px;
+            background-color: rgba(255,255,255,0.6); border-radius: 16px; border: 1px dashed #CBD5E1;
+        }
+
+        /* 하단 플로팅 액션바 */
+        .bottom-action-dock {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 600px; padding: 16px;
+            background: linear-gradient(to top, #E2EEDF 80%, transparent 100%);
+            z-index: 99; text-align: center;
+        }
+        .btn-write-trigger {
+            width: 100%; background-color: #173827; color: #FFFFFF; border: none;
+            padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 700;
+            box-shadow: 0 10px 20px rgba(23, 56, 39, 0.25); cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .btn-write-trigger:active { transform: scale(0.98); background-color: #0E2519; }
+
+        /* 공통 대화상자(모달) 팝업 */
         .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
-            justify-content: center; align-items: center; z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            z-index: 1000; display: none; align-items: center; justify-content: center; padding: 16px;
         }
-        .modal-content {
-            background-color: white; padding: 32px; border-radius: 12px; width: 92%; max-width: 550px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); animation: fadeIn 0.2s ease-out;
-            max-height: 85vh; overflow-y: auto;
+        .modal-body {
+            background-color: #FFFFFF; width: 100%; max-width: 460px;
+            border-radius: 20px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 90vh; overflow-y: auto;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        .modal-content h2 { font-size: 20px; color: #0F172A; margin-bottom: 16px; font-weight: 700; text-align: left; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; }
-        .modal-sub-title { font-size: 15px; font-weight: 700; color: #1E293B; margin-bottom: 4px; text-align: left; }
-        .modal-desc { font-size: 13px; color: #64748B; margin-bottom: 16px; text-align: left; }
-        
-        .form-group { margin-bottom: 16px; text-align: left; }
-        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #334155; }
-        
-        .form-group input, .form-group textarea {
-            width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; outline: none; background-color: #FFFFFF;
-        }
-        .form-group input:focus, .form-group textarea:focus { border-color: #318F50; }
+        @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .region-group-title {
-            font-size: 12px; font-weight: 700; color: #64748B; background: #F1F5F9; 
-            padding: 4px 8px; border-radius: 4px; margin: 12px 0 6px 0; display: inline-block;
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { font-size: 18px; font-weight: 700; color: #1E293B; }
+        .modal-close-btn { background: none; border: none; font-size: 22px; color: #94A3B8; cursor: pointer; }
+
+        /* 폼 요소 공통 양식 */
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .form-control {
+            width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; padding: 12px;
+            font-size: 14px; color: #1E293B; outline: none; transition: border-color 0.2s;
         }
-        .region-buttons-container {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 6px;
-        }
+        .form-control:focus { border-color: #173827; }
+        textarea.form-control { height: 140px; resize: none; }
+
+        /* 분쟁지역 단추 그리드 */
+        .region-select-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 6px; }
         .btn-region-select {
-            display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #F8FAFC;
-            border: 1px solid #E2E8F0; border-radius: 8px; font-size: 13px; font-weight: 500; text-align: left;
-            cursor: pointer; transition: all 0.2s ease; color: #334155;
+            background-color: #F8FAFC; border: 1px solid #E2E8F0; padding: 10px;
+            border-radius: 8px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; text-align: center;
         }
-        .btn-region-select:hover { background: #F1F5F9; border-color: #CBD5E1; }
-        .btn-region-select.active {
-            background: #E2F5E5; border-color: #318F50; color: #155E2F; font-weight: 600;
+        .btn-region-select.active { background-color: #E2EEDF; border-color: #2A5A44; color: #173827; font-weight: 600; }
+
+        .btn-submit-action {
+            width: 100%; background-color: #173827; color: white; border: none;
+            padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px;
         }
-        .btn-region-select .flag-icon { font-size: 18px; }
-        
-        .modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
-        .btn-cancel { background-color: #FFFFFF; color: #1E293B; border: 1px solid #E2E8F0; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
-        .btn-login-submit { background-color: #1E293B; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
-        .btn-register-submit { background-color: #318F50; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
 
-        .google-login-separator {
-            display: flex; align-items: center; text-align: center; color: #94A3B8; font-size: 12px; font-weight: 600; margin: 16px 0;
+        /* 구글 간편인증 전용 단추 */
+        .google-login-heavy-btn {
+            width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+            background-color: #FFFFFF; border: 1px solid #CBD5E1; padding: 12px; border-radius: 10px;
+            font-size: 14px; font-weight: 600; color: #334155; cursor: pointer; margin-bottom: 20px;
         }
-        .google-login-separator::before, .google-login-separator::after { content: ''; flex: 1; border-bottom: 1px solid #F1F5F9; }
-        
-        .btn-google-auth {
-            width: 100%; display: flex; align-items: center; justify-content: center; position: relative;
-            background-color: #FFFFFF; color: #334155; border: 1px solid #E2E8F0; padding: 12px;
-            border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer;
-        }
-        .google-icon-wrapper { position: absolute; left: 16px; display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; }
-        .google-icon { width: 18px; height: 18px; object-fit: contain; }
-        .switch-form-text { font-size: 13px; color: #64748B; text-align: center; margin-top: 16px; }
-        .switch-form-text span { color: #318F50; font-weight: 600; cursor: pointer; text-decoration: underline; margin-left: 4px; }
+        .google-login-heavy-btn img { width: 18px; height: 18px; }
 
-        /* 📱 모바일 기기 반응형 레이아웃 분리 조율 */
-        @media (max-width: 768px) {
-            .bg-circle-pattern {
-                top: -200px;
-                width: 220vw;
-                height: 460px;
-            }
-            
-            header { padding: 40px 16px 20px; }
-            header h1 { font-size: 38px; }
-            header p { font-size: 14px; margin-bottom: 16px; }
+        .modal-divider { display: flex; align-items: center; text-align: center; color: #94A3B8; font-size: 12px; margin-bottom: 20px; }
+        .modal-divider::before, .modal-divider::after { content: ''; flex: 1; border-bottom: 1px solid #E2E8F0; }
+        .modal-divider:not(:empty)::before { margin-right: .5em; }
+        .modal-divider:not(:empty)::after { margin-left: .5em; }
 
-            /* 📱 모바일에서는 문구 아래 정중앙에 배치 */
-            .top-nav { 
-                position: relative; 
-                top: 0; 
-                bottom: 0;
-                right: 0; 
-                display: inline-block;
-                margin: 4px auto 0 auto;
-            }
-            .btn-top-login { 
-                padding: 8px 36px; 
-                font-size: 14px; 
-                background: rgba(255, 255, 255, 0.25);
-            }
-
-            .container { padding: 20px 14px 40px; margin: 10px auto 60px; border-radius: 16px; width: calc(100% - 24px); }
-            .list-title { font-size: 18px; margin-bottom: 16px; }
-            
-            .main-filter-section { padding: 12px; margin-bottom: 24px; width: 100%; }
-            .main-filter-container {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                gap: 8px;
-                padding-bottom: 8px;
-                width: 100%;
-                -webkit-overflow-scrolling: touch;
-            }
-            .main-filter-container::-webkit-scrollbar { height: 5px; }
-            .main-filter-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
-
-            .filter-group-title { font-size: 11px; margin: 12px 0 6px 0; }
-            .btn-main-filter { padding: 8px 14px; font-size: 12px; flex-shrink: 0; }
-
-            .letter-card { padding: 16px; border-radius: 12px; }
-            .user-name { font-size: 15px; }
-            .letter-content { font-size: 14px; }
-            
-            .modal-content { padding: 24px 16px; width: 95%; }
-            .region-buttons-container { grid-template-columns: 1fr; }
-        }
+        .modal-footer-link { text-align: center; font-size: 13px; color: #64748B; margin-top: 16px; }
+        .modal-footer-link span { color: #173827; font-weight: 600; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
 
     <div class="bg-circle-pattern"></div>
 
-    <header>
-        <h1>Safe-line</h1>
-        <p>세이프라인에서 따뜻한 한마디를 나눠보세요.</p>
-        <div class="top-nav">
-            <button class="btn-top-login" id="loginTriggerBtn">로그인</button>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="welcome-bar" id="welcomeBar"></div>
-        <div class="list-title">지역별 위로 편지 모아보기</div>
+    <div class="app-container">
         
-        <div class="main-filter-section">
-            <div class="main-filter-container" style="margin-bottom: 4px;">
-                <button class="btn-main-filter active" data-filter="all">✨ 전체 편지 보기</button>
+        <header class="app-header">
+            <div class="brand-zone">
+                <div class="brand-logo-frame">
+                    <img src="image_573d43.png" alt="Safe-line Logo" onerror="this.src='🕊️'">
+                </div>
+                <span class="brand-title">세이프 라인</span>
             </div>
+            <button class="global-login-btn" id="loginTriggerBtn">로그인</button>
+        </header>
 
-            <div class="filter-group-title">대규모 전면전 및 국제 전쟁 지대</div>
-            <div class="main-filter-container">
-                <button class="btn-main-filter" data-filter="🇺🇸🇮🇱 vs 🇮🇷 중동 분쟁지">🇺🇸🇮🇱🇮🇷 중동 분쟁지</button>
-                <button class="btn-main-filter" data-filter="🇺🇦 vs 🇷🇺 우크라이나 전선">🇺🇦🇷🇺 우크라이나 전선</button>
-            </div>
+        <div class="welcome-info-bar" id="welcomeBar"></div>
 
-            <div class="filter-group-title">고강도 내전 지대</div>
-            <div class="main-filter-container">
-                <button class="btn-main-filter" data-filter="🇸🇩 수단 내전지">🇸🇩 수단 내전지</button>
-                <button class="btn-main-filter" data-filter="🇲🇲 미얀마 저항선">🇲🇲 미얀마 저항선</button>
-                <button class="btn-main-filter" data-filter="🇸🇾 시리아 분쟁지">🇸🇾 시리아 분쟁지</button>
-                <button class="btn-main-filter" data-filter="🇸🇴 소말리아 전선">🇸🇴 소말리아 전선</button>
-            </div>
+        <section class="intro-board">
+            <h1>전쟁 없는 평화로운<br>지구를 위하여</h1>
+            <p>고통받는 전 세계 모든 분쟁 지역의 민간인들을 향해 따뜻한 위로와 연대의 한 마디를 실시간으로 전해 주세요.</p>
+        </section>
 
-            <div class="filter-group-title">국지적 충돌 및 무정부 지대</div>
-            <div class="main-filter-container">
-                <button class="btn-main-filter" data-filter="🇲🇱🇧🇫🇳🇪 사헬 무정부지">🇲🇱🇧🇫 사헬 무정부지</button>
-                <button class="btn-main-filter" data-filter="🇨🇩 콩고 동부지대">🇨🇩 콩고 동부지대</button>
-                <button class="btn-main-filter" data-filter="🇾🇪 예멘 홍해 공방지">🇾🇪 예멘 홍해 공방지</button>
-                <button class="btn-main-filter" data-filter="🇳🇬 나이지리아 북부">🇳🇬 나이지리아 북부</button>
-            </div>
+        <nav class="filter-scroll-wrapper">
+            <button class="btn-main-filter active" data-filter="all">🌍 전체 지역</button>
+            <button class="btn-main-filter" data-filter="우크라이나">🇺🇦 우크라이나</button>
+            <button class="btn-main-filter" data-filter="중동(팔레스타인)">🇵🇸 중동 분쟁지</button>
+            <button class="btn-main-filter" data-filter="미얀마">🇲🇲 미얀마</button>
+            <button class="btn-main-filter" data-filter="수단">🇸🇩 수단 내전지</button>
+        </nav>
 
-            <div class="filter-group-title">무장 카르텔 및 치안 불안 지대</div>
-            <div class="main-filter-container">
-                <button class="btn-main-filter" data-filter="🇭🇹 아이티 갱단 분쟁구역">🇭🇹 아이티 분쟁구역</button>
-                <button class="btn-main-filter" data-filter="🇲🇽 멕시코 카르텔 교전지">🇲🇽 멕시코 카르텔 교전지</button>
-            </div>
-        </div>
+        <main class="letters-feed-container" id="letterList">
+            <div class="empty-message">서버로부터 연대 편지를 실시간으로 불러오는 중입니다... 🕊️</div>
+        </main>
 
-        <div id="letterList"></div>
-        <button class="btn-write-floating" id="writeTriggerBtn">글쓰기</button>
+    </div>
+
+    <div class="bottom-action-dock">
+        <button class="btn-write-trigger" id="writeTriggerBtn">🕊️ 위로 편지 보내기</button>
     </div>
 
     <div class="modal-overlay" id="loginModal">
-        <div class="modal-content">
-            <h2>Google 간편 로그인</h2>
-            <div class="modal-sub-title">간편 로그인</div>
-            <div class="modal-desc">세이프라인에서 따뜻한 한마디를 나눠보세요.</div>
+        <div class="modal-body">
+            <div class="modal-header">
+                <h2>세이프 라인 로그인</h2>
+                <button class="modal-close-btn" onclick="closeModal('loginModal')">&times;</button>
+            </div>
             
-            <button type="button" class="btn-google-auth" id="realGoogleLoginBtn">
-                <div class="google-icon-wrapper">
-                    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
-                </div>
-                Google 계정으로 로그인
+            <button class="google-login-heavy-btn" id="realGoogleLoginBtn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
+                Google 계정으로 계속하기
             </button>
 
-            <div class="google-login-separator">또는 일반 로그인</div>
+            <div class="modal-divider">또는 일반 계정 로그인</div>
 
             <form id="customLoginForm">
                 <div class="form-group">
-                    <label for="userId">아이디</label>
-                    <input type="text" id="userId" placeholder="아이디 입력" required>
+                    <label>아이디</label>
+                    <input type="text" class="form-control" id="userId" placeholder="아이디를 입력하세요" required>
                 </div>
                 <div class="form-group">
-                    <label for="userPw">비밀번호</label>
-                    <input type="password" id="userPw" placeholder="비밀번호 입력" required>
+                    <label>비밀번호</label>
+                    <input type="password" class="form-control" id="userPw" placeholder="비밀번호를 입력하세요" required>
                 </div>
-                
-                <div class="modal-buttons">
-                    <button type="button" class="btn-cancel" onclick="closeModal('loginModal')">취소</button>
-                    <button type="submit" class="btn-login-submit">로그인</button>
-                </div>
-                <div class="switch-form-text">아직 계정이 없으신가요?<span id="goToRegister">회원가입 하기</span></div>
+                <button type="submit" class="btn-submit-action">로그인하기</button>
             </form>
+
+            <div class="modal-footer-link">
+                아직 계정이 없으신가요? <span id="goToRegister">간편 회원가입</span>
+            </div>
         </div>
     </div>
 
     <div class="modal-overlay" id="registerModal">
-        <div class="modal-content">
-            <h2>새 계정 만들기</h2>
-            <div class="modal-sub-title">일반 회원가입</div>
-            <div class="modal-desc">세이프라인의 회원이 되어 따뜻한 위로를 전하세요.</div>
-
+        <div class="modal-body">
+            <div class="modal-header">
+                <h2>새로운 연대 회원가입</h2>
+                <button class="modal-close-btn" onclick="closeModal('registerModal')">&times;</button>
+            </div>
             <form id="customRegisterForm">
                 <div class="form-group">
-                    <label for="regId">사용할 아이디</label>
-                    <input type="text" id="regId" placeholder="아이디를 설정하세요" required>
+                    <label>아이디</label>
+                    <input type="text" class="form-control" id="regId" placeholder="사용할 아이디 입력" required>
                 </div>
                 <div class="form-group">
-                    <label for="regPw">비밀번호</label>
-                    <input type="password" id="regPw" placeholder="비밀번호 입력 (숫자, 특수문자 필수 포함)" required>
+                    <label>비밀번호 (보안 인증 필수)</label>
+                    <input type="password" class="form-control" id="regPw" placeholder="숫자 및 특수문자 포함 8자 이상" required>
                 </div>
                 <div class="form-group">
-                    <label for="regNickname">기본 닉네임</label>
-                    <input type="text" id="regNickname" placeholder="편지에 표시될 기본 이름" required>
+                    <label>닉네임 (활동명)</label>
+                    <input type="text" class="form-control" id="regNickname" placeholder="화면에 표시될 이름" required>
                 </div>
-                
-                <div class="modal-buttons">
-                    <button type="button" class="btn-cancel" onclick="closeModal('registerModal')">취소</button>
-                    <button type="submit" class="btn-register-submit">회원가입 완료</button>
-                </div>
-                <div class="switch-form-text">이미 계정이 있으신가요?<span id="goToLogin">로그인 하기</span></div>
+                <button type="submit" class="btn-submit-action">안전하게 가입 완료</button>
             </form>
+            <div class="modal-footer-link">
+                이미 가입한 계정이 있나요? <span id="goToLogin">로그인으로 돌아가기</span>
+            </div>
         </div>
     </div>
 
     <div class="modal-overlay" id="writeModal">
-        <div class="modal-content">
-            <h2 id="modalTitle">따뜻한 마음 전하기</h2>
+        <div class="modal-body">
+            <div class="modal-header">
+                <h2 id="modalTitle">따뜻한 마음 전하기</h2>
+                <button class="modal-close-btn" onclick="closeModal('writeModal')">&times;</button>
+            </div>
             <form id="letterForm">
                 <input type="hidden" id="editId">
-                <input type="hidden" id="warRegion" required>
-
-                <div class="form-group">
-                    <label for="nickname">닉네임</label>
-                    <input type="text" id="nickname" placeholder="이름을 입력해 주세요" required>
-                </div>
                 
                 <div class="form-group">
+                    <label>작성자 닉네임</label>
+                    <input type="text" class="form-control" id="nickname" readonly style="background-color:#F1F5F9; color:#64748B;">
+                </div>
+
+                <div class="form-group">
                     <label>위로를 전할 분쟁 지역 선택</label>
-                    
-                    <div class="region-group-title">대규모 전면전 및 국제 전쟁 지대</div>
-                    <div class="region-buttons-container">
-                        <button type="button" class="btn-region-select" data-value="🇺🇸🇮🇱 vs 🇮🇷 중동 분쟁지">
-                            <span class="flag-icon">🇺🇸🇮🇱🇮🇷</span> 중동 분쟁 지대
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇺🇦 vs 🇷🇺 우크라이나 전선">
-                            <span class="flag-icon">🇺🇦🇷🇺</span> 우크라이나 전선
-                        </button>
+                    <div class="region-select-grid">
+                        <button type="button" class="btn-region-select" data-value="우크라이나">🇺🇦 우크라이나</button>
+                        <button type="button" class="btn-region-select" data-value="중동(팔레스타인)">🇵🇸 중동 분쟁지</button>
+                        <button type="button" class="btn-region-select" data-value="미얀마">🇲🇲 미얀마</button>
+                        <button type="button" class="btn-region-select" data-value="수단">🇸🇩 수단 내전지</button>
                     </div>
-
-                    <div class="region-group-title">고강도 내전 지대</div>
-                    <div class="region-buttons-container">
-                        <button type="button" class="btn-region-select" data-value="🇸🇩 수단 내전지">
-                            <span class="flag-icon">🇸🇩</span> 수단 내전지
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇲🇲 미얀마 저항선">
-                            <span class="flag-icon">🇲🇲</span> 미얀마 저항선
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇸🇾 시리아 분쟁지">
-                            <span class="flag-icon">🇸🇾</span> 시리아 분쟁지
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇸🇴 소말리아 전선">
-                            <span class="flag-icon">🇸🇴</span> 소말리아 전선
-                        </button>
-                    </div>
-
-                    <div class="region-group-title">국지적 충돌 및 무정부 지대</div>
-                    <div class="region-buttons-container">
-                        <button type="button" class="btn-region-select" data-value="🇲🇱🇧🇫🇳🇪 사헬 무정부지">
-                            <span class="flag-icon">🇲🇱🇧🇫</span> 사헬 무정부지
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇨🇩 콩고 동부지대">
-                            <span class="flag-icon">🇨🇩</span> 콩고 동부지대
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇾🇪 예멘 홍해 공방지">
-                            <span class="flag-icon">🇾🇪</span> 예멘 홍해 공방지
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇳🇬 나이지리아 북부">
-                            <span class="flag-icon">🇳🇬</span> 나이지리아 북부
-                        </button>
-                    </div>
-
-                    <div class="region-group-title">무장 카르텔 및 치안 불안 지대</div>
-                    <div class="region-buttons-container">
-                        <button type="button" class="btn-region-select" data-value="🇭🇹 아이티 갱단 분쟁구역">
-                            <span class="flag-icon">🇭🇹</span> 아이티 분쟁구역
-                        </button>
-                        <button type="button" class="btn-region-select" data-value="🇲🇽 멕시코 카르텔 교전지">
-                            <span class="flag-icon">🇲🇽</span> 멕시코 카르텔 교전지
-                        </button>
-                    </div>
+                    <input type="hidden" id="warRegion" required>
                 </div>
 
-                <div class="form-group" style="margin-top:20px;">
-                    <label for="content">메시지 내용</label>
-                    <textarea id="content" rows="4" placeholder="그곳에서 고통받고 있는 무고한 이들을 향한 따뜻한 위로와 평화의 메시지를 적어주세요" required></textarea>
+                <div class="form-group">
+                    <label>평화 연대 메시지</label>
+                    <textarea class="form-control" id="content" placeholder="분쟁 지역의 민간인들에게 전할 따뜻한 위로와 희망의 편지를 작성해 주세요." required></textarea>
                 </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn-cancel" onclick="closeModal('writeModal')">취소</button>
-                    <button type="submit" class="btn-submit" id="submitBtn" style="background-color: #318F50; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">보내기</button>
-                </div>
+
+                <button type="submit" class="btn-submit-action">전 세계에 편지 배달하기 🕊️</button>
             </form>
         </div>
     </div>
@@ -455,7 +420,10 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // 🌟 Firestore(구글 클라우드 DB) 모듈 연동 도구 신규 탑재!
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // 질문자님의 프로젝트 전용 보안 키 세트
         const firebaseConfig = {
             apiKey: "AIzaSyAW0_JUF1s4cgSDDmVJNGsSOFYYsidQMhg",
             authDomain: "safe-line-83fd0.firebaseapp.com",
@@ -469,6 +437,8 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        // 🌟 개설 완료된 파이어스토어 리모컨 활성화
+        const db = getFirestore(app);
 
         let loginType = null; 
         let currentUserDisplay = null; 
@@ -478,7 +448,8 @@
         
         let currentFilter = 'all';
 
-        let letters = JSON.parse(localStorage.getItem('letters')) || [];
+        // 전역 메모리 배열 변환 (더 이상 로컬스토리지를 쓰지 않고 구글 서버 데이터를 담습니다)
+        let letters = [];
         let customUsers = JSON.parse(localStorage.getItem('customUsers')) || {};
 
         const savedCustomUser = localStorage.getItem('customUserKey');
@@ -489,7 +460,6 @@
             userProfileData.nickname = customUsers[savedCustomUser].nickname;
             currentUserPhoto = null;
             updateUI();
-            renderLetters();
         }
 
         onAuthStateChanged(auth, (user) => {
@@ -507,7 +477,6 @@
                 }
             }
             updateUI();
-            renderLetters();
         });
 
         window.openModal = function(id) { document.getElementById(id).style.display = 'flex'; }
@@ -545,8 +514,8 @@
                 loginBtn.textContent = "로그아웃";
                 welcomeBar.style.display = 'block';
                 welcomeBar.textContent = loginType === 'google' 
-                    ? `🌐 구글 인증: ${currentUserDisplay}`
-                    : `🔒 일반 회원: ${currentUserDisplay}님`;
+                    ? `🌐 구글 인증 연대원: ${currentUserDisplay}`
+                    : `🔒 일반 인증 회원: ${currentUserDisplay}님`;
             } else {
                 loginBtn.textContent = "로그인";
                 welcomeBar.style.display = 'none';
@@ -561,9 +530,8 @@
                     localStorage.removeItem('customUserKey');
                 }
                 loginType = null; currentUserDisplay = null; currentUserUniqueKey = null; currentUserPhoto = null;
-                alert('로그아웃 되었습니다.');
+                alert('로그아웃 완료. 평화의 목소리를 지켜주셔서 감사합니다.');
                 updateUI();
-                renderLetters();
             } else {
                 openModal('loginModal');
             }
@@ -581,10 +549,9 @@
                 closeModal('loginModal');
                 alert(`환영합니다, ${currentUserDisplay}님! ✨`);
                 updateUI();
-                renderLetters();
             } catch (error) {
                 console.error(error);
-                alert(`로그인 오류: ${error.message}`);
+                alert(`로그인 인증 실패: ${error.message}`);
             }
         });
 
@@ -594,7 +561,7 @@
             const pw = document.getElementById('userPw').value;
 
             if (!customUsers[id] || customUsers[id].password !== pw) {
-                alert('아이디 혹은 비밀번호가 일치하지 않습니다.');
+                alert('아이디 혹은 패스워드가 일치하지 않습니다.');
                 return;
             }
 
@@ -609,7 +576,6 @@
             closeModal('loginModal');
             document.getElementById('customLoginForm').reset();
             updateUI();
-            renderLetters();
         });
 
         document.getElementById('customRegisterForm').addEventListener('submit', (e) => {
@@ -621,12 +587,12 @@
             const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
             if (!passwordRegex.test(pw)) {
-                alert('🔒 보안을 위해 비밀번호에는 숫자와 특수문자가 각각 최소 1개 이상 포함되어야 합니다! (최소 8자 이상)');
+                alert('🔒 암호 보안 경고: 비밀번호는 숫자와 특수문자가 최소 1개 조합된 8자 이상이어야 승인됩니다!');
                 return;
             }
 
             if (customUsers[id]) {
-                alert('이미 가입되어 사용 중인 아이디입니다.');
+                alert('이미 가입 등록이 끝난 아이디입니다.');
                 return;
             }
 
@@ -643,14 +609,13 @@
 
             closeModal('registerModal');
             document.getElementById('customRegisterForm').reset();
-            alert('🎉 회원가입이 완료되었습니다!');
+            alert('🎉 세이프 라인 가입을 진심으로 축하합니다!');
             updateUI();
-            renderLetters();
         });
 
         document.getElementById('writeTriggerBtn').addEventListener('click', () => {
             if (!currentUserUniqueKey) {
-                alert('로그인이 필요한 서비스입니다.');
+                alert('위로 편지 전달은 로그인 인증 후 가능합니다.');
                 openModal('loginModal');
                 return;
             }
@@ -665,7 +630,8 @@
             openModal('writeModal');
         });
 
-        document.getElementById('letterForm').addEventListener('submit', (e) => {
+        // 🌟 편지 등록 핵심 로직: 구글 파이어스토어 구역으로 패킷 직접 사출
+        document.getElementById('letterForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const editId = document.getElementById('editId').value;
             const nickname = document.getElementById('nickname').value;
@@ -673,42 +639,45 @@
             const content = document.getElementById('content').value;
 
             if (!warRegion) {
-                alert('위로를 전할 분쟁 지역 버튼을 선택해 주세요!');
+                alert('위로를 수신할 대상을 상단 단추에서 선택하세요!');
                 return;
             }
 
-            if (editId) {
-                const letter = letters.find(l => l.id == editId);
-                if (letter && letter.writer === currentUserUniqueKey) {
-                    letter.nickname = nickname;
-                    letter.warRegion = warRegion;
-                    letter.content = content;
+            try {
+                if (editId) {
+                    // 글 수정 프로세스
+                    const docRef = doc(db, "letters", editId);
+                    await updateDoc(docRef, {
+                        nickname: nickname,
+                        warRegion: warRegion,
+                        content: content
+                    });
+                } else {
+                    // 새 글 등록 프로세스 (구글 중앙 창고 "letters" 테이블로 전송)
+                    await addDoc(collection(db, "letters"), {
+                        writer: currentUserUniqueKey,
+                        nickname: nickname,
+                        warRegion: warRegion,
+                        content: content,
+                        photoURL: currentUserPhoto,
+                        createdAt: Date.now() // 실시간 시간순 정렬용 마일스톤 생성
+                    });
                 }
-            } else {
-                letters.unshift({
-                    id: Date.now(),
-                    writer: currentUserUniqueKey,
-                    nickname,
-                    warRegion,
-                    content,
-                    timeStr: "방금 전",
-                    photoURL: currentUserPhoto
+                closeModal('writeModal');
+                
+                currentFilter = warRegion;
+                mainFilterButtons.forEach(b => {
+                    if(b.getAttribute('data-filter') === warRegion) b.classList.add('active');
+                    else b.classList.remove('active');
                 });
+            } catch (error) {
+                console.error("Cloud DB 통신 장애:", error);
+                alert("서버 연결 실패: " + error.message);
             }
-            localStorage.setItem('letters', JSON.stringify(letters));
-            closeModal('writeModal');
-            
-            currentFilter = warRegion;
-            mainFilterButtons.forEach(b => {
-                if(b.getAttribute('data-filter') === warRegion) b.classList.add('active');
-                else b.classList.remove('active');
-            });
-
-            renderLetters();
         });
 
         window.editLetter = function(id) {
-            const letter = letters.find(l => l.id == id);
+            const letter = letters.find(l => l.id === id);
             if (!letter || letter.writer !== currentUserUniqueKey) return;
             document.getElementById('modalTitle').textContent = '편지 수정하기';
             document.getElementById('editId').value = letter.id;
@@ -727,15 +696,35 @@
             openModal('writeModal');
         }
 
-        window.deleteLetter = function(id) {
-            const letter = letters.find(l => l.id == id);
+        window.deleteLetter = async function(id) {
+            const letter = letters.find(l => l.id === id);
             if (!letter || letter.writer !== currentUserUniqueKey) return;
-            if (confirm('메시지를 완전히 삭제할까요?')) {
-                letters = letters.filter(l => l.id !== id);
-                localStorage.setItem('letters', JSON.stringify(letters));
-                renderLetters();
+            if (confirm('전송한 연대 메시지를 영구 회수(삭제)할까요?')) {
+                try {
+                    await deleteDoc(doc(db, "letters", id));
+                } catch(error) {
+                    alert("명령 실패: " + error.message);
+                }
             }
         }
+
+        // 🌟 [최고 중요] 실시간 감시 센서 구동 (onSnapshot)
+        // 누군가 지구 반대편에서 글을 날려도 새로고침 없이 실시간 동기화로 피드를 새로 그려줍니다!
+        const q = query(collection(db, "letters"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            letters = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                letters.push({
+                    id: doc.id,
+                    ...data,
+                    timeStr: "방금 전" 
+                });
+            });
+            renderLetters();
+        }, (error) => {
+            console.error("실시간 수신 엔진 셧다운 (보안 규칙 활성화 상태를 점검하세요):", error);
+        });
 
         function renderLetters() {
             const container = document.getElementById('letterList');
@@ -746,7 +735,7 @@
                 : letters.filter(l => l.warRegion === currentFilter);
 
             if (filteredLetters.length === 0) {
-                container.innerHTML = '<div class="empty-message">선택하신 지역에 도착한 위로의 편지가 아직 없습니다. 첫 메시지를 선물해 보세요! ✨</div>';
+                container.innerHTML = '<div class="empty-message">선택하신 분쟁 지역에 도착한 평화의 메시지가 없습니다. 첫 번째 등불을 밝혀보세요! ✨</div>';
                 return;
             }
 
@@ -757,13 +746,13 @@
                 if (currentUserUniqueKey && letter.writer === currentUserUniqueKey) {
                     actionBtnHtml = `
                         <div class="card-actions">
-                            <button class="action-btn edit-btn" onclick="editLetter(${letter.id})">수정</button>
-                            <button class="action-btn delete-btn" onclick="deleteLetter(${letter.id})">삭제</button>
+                            <button class="action-btn edit-btn" onclick="editLetter('${letter.id}')">수정</button>
+                            <button class="action-btn delete-btn" onclick="deleteLetter('${letter.id}')">삭제</button>
                         </div>
                     `;
                 }
 
-                let avatarHtml = `<div style="background: #9BBF9E; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:18px; width:100%; height:100%;">${escapeHtml(letter.nickname[0] || 'P')}</div>`;
+                let avatarHtml = `<div style="background: #9BBF9E; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:18px; width:100%; height:100%;">${escapeHtml(letter.nickname ? letter.nickname[0] : 'P')}</div>`;
                 if (letter.photoURL) {
                     avatarHtml = `<img src="${letter.photoURL}" alt="Profile">`;
                 }
@@ -774,13 +763,13 @@
                             ${avatarHtml}
                         </div>
                         <div class="user-info">
-                            <span class="user-name">${escapeHtml(letter.nickname)}</span>
+                            <span class="user-name">${escapeHtml(letter.nickname || '익명 연대원')}</span>
                             <span class="time-ago">${letter.timeStr || '방금 전'}</span>
                         </div>
                     </div>
                     <div class="target-region-badge">To. ${escapeHtml(letter.warRegion || '지정되지 않은 분쟁지역')}</div>
                     <div class="card-options">•••</div>
-                    <p class="letter-content" style="margin-top:8px;">${escapeHtml(letter.content)}</p>
+                    <p class="letter-content" style="margin-top:8px;">${escapeHtml(letter.content || '')}</p>
                     ${actionBtnHtml}
                 `;
                 container.appendChild(card);
@@ -788,10 +777,9 @@
         }
 
         function escapeHtml(text) {
+            if(!text) return '';
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
-
-        renderLetters();
     </script>
 </body>
 </html>
